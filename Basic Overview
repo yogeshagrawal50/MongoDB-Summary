@@ -47,13 +47,11 @@ CRUD Operations
 •	Query – find one, find many, query nested documents, arrays, projections, return data as array or cursors
 •	Read Concerns and Write concerns during CRUD operations
 •	Retryable reads and writes
-•	For examples see the file attached to class 3
+
 Aggregation Pipeline
 •	Document processing pipeline having different stages
 •	Output for one stage is input to next
 •	Different optimization techniques avaliable for faster results
-•	For examples see the file attached to class 4
-
 
 GridFS
 •	Specification for storing files > 16MB which is the limit for a single document in MongoDB
@@ -125,7 +123,7 @@ Indexes
 ◦	Try to use this rule while creating indexes
 ◦	Give preference to fields used in equality first, then to sort fileds and then fileds used in range based queries 
 •	Use query explain plans to understand the useage of indexes
-•	For examples, see the file attached to class 4
+
 Diagnostics
 •	Database Profiling
 ◦	captures information about different ops - read, write, cursor, commands
@@ -172,7 +170,7 @@ Diagnostics
 ▪	conn - total open connections
 ▪	set - name of replica set if applicable
 ▪	repl - replication status of member
-•	For examples, see file attached to class 10
+
 Replica Sets
 •	Group of mongod servers that maintain the same data set
 •	Provides redundancy and high availability
@@ -205,7 +203,7 @@ Replica Sets
 ▪	cannot become primary as does not have data
 ▪	useful when you have even number of replica sets, can add arbiter to just participate in voting
 ▪	should use only 1 arbiter in a set
-•	For details on how to create each type of node, see the file attached to class 6
+
 Sharding
 •	Sharding is an example of horizontal scaling
 •	Components
