@@ -1,0 +1,122 @@
+// Json Export
+
+// output on stdout.
+mongoexport --db=CRUD --collection=mflix 
+
+// output to a file
+mongoexport --db=CRUD --collection=mflix --out=D:\\Backups\\mflix.json
+
+// output to a file
+mongoexport --uri=mongodb://localhost:27017 --db=CRUD --collection=mflix --out=D:\\Backups\\mflix.json
+
+// output to a file default port 27017
+mongoexport --host=localhost --db=CRUD --collection=mflix --out=D:\\Backups\\mflix.json
+
+// output to a file default host localhost
+mongoexport --port=27017 --db=CRUD --collection=mflix --out=D:\\Backups\\mflix.json
+
+// output to a file default host localhost with high verbosity
+mongoexport --port=27017 --db=CRUD --collection=mflix --out=D:\\Backups\\mflix.json --verbose=5
+
+// output to a file default host localhost with better format
+mongoexport --port=27017 --db=CRUD --collection=mflix --out=D:\\Backups\\mflix.json --pretty
+
+// output to a file default host localhost with better format and as JsonArray
+mongoexport --port=27017 --db=CRUD --collection=mflix --out=D:\\Backups\\mflix.json --jsonArray --pretty
+
+// output to a file default host localhost with better format and query/filter
+mongoexport --port=27017 --db=CRUD --collection=mflix --out=D:\\Backups\\mflix.json --query="{\"year\":1969}" --jsonArray --pretty
+
+// output to a file default host localhost with better format and query/filter and jsonFormat
+mongoexport --port=27017 --db=CRUD --collection=mflix --out=D:\\Backups\\mflix.json --query="{\"year\":1969}" --jsonArray --pretty --jsonFormat=canonical
+
+// output to a file default host localhost with better format and query/filter in a file and jsonFormat
+mongoexport --port=27017 --db=CRUD --collection=mflix --out=D:\\Backups\\mflix.json --queryFile=D:\\Backups\\filter.txt --jsonArray --pretty --jsonFormat=canonical
+
+// output to a file default host localhost with better format and query/filter in a file and csv format
+mongoexport --port=27017 --db=CRUD --collection=mflix --out=D:\\Backups\\mflix.csv --queryFile=D:\\Backups\\filter.txt --type=csv --fields="title,_id,cast,runtime"
+
+// output to a file default host localhost with better format and query/filter in a file and csv format with field file
+mongoexport --port=27017 --db=CRUD --collection=mflix --out=D:\\Backups\\mflix.csv --queryFile=D:\\Backups\\filter.txt --type=csv --fieldFile=D:\\Backups\\fields.txt
+
+// output to a file default host localhost with better format and query/filter in a file and csv format with field file and no header line
+mongoexport --port=27017 --db=CRUD --collection=mflix --out=D:\\Backups\\mflix.csv --queryFile=D:\\Backups\\filter.txt --type=csv --fieldFile=D:\\Backups\\fields.txt --noHeaderLine
+
+
+
+// output to a file with coll not exists
+mongoexport --port=27017 --db=CRUD --collection=mflix1 --out=D:\\Backups\\mflix.csv --queryFile=D:\\Backups\\filter.txt --type=csv --fieldFile=D:\\Backups\\fields.txt
+
+// output to a file with coll not exists
+mongoexport --port=27017 --db=CRUD --collection=mflix1 --assertExists --out=D:\\Backups\\mflix.csv --queryFile=D:\\Backups\\filter.txt --type=csv --fieldFile=D:\\Backups\\fields.txt
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+// Json Import
+// import from a json file
+mongoimport --uri=mongodb://localhost:27017 --db=CRUD --collection=mflix_import --file=D:\\Backups\\mflix.json --verbose=5 --jsonArray
+
+// import from a json file and drop collection before import
+mongoimport --uri=mongodb://localhost:27017 --db=CRUD --collection=mflix_import --file=D:\\Backups\\mflix.json --verbose=5 --jsonArray --drop
+
+// import from a json file and mode is insert
+mongoimport --uri=mongodb://localhost:27017 --db=CRUD --collection=mflix_import --file=D:\\Backups\\mflix.json --verbose=5 --jsonArray --mode=insert
+
+// import from a json file and mode is upsert
+mongoimport --uri=mongodb://localhost:27017 --db=CRUD --collection=merge-upsert-coll --mode=upsert --file=D:\\Backups\\upsert.json --verbose=5
+
+// import from a json file and mode is merge
+mongoimport --uri=mongodb://localhost:27017 --db=CRUD --collection=merge-upsert-coll --mode=merge --file=D:\\Backups\\merge.json --verbose=5
+
+// import from a json file and mode is insert and stop on error
+mongoimport --uri=mongodb://localhost:27017 --db=CRUD --collection=mflix_import --file=D:\\Backups\\mflix.json --verbose=5 --jsonArray --mode=insert --stopOnError
+
+// import from a json file
+mongoimport --uri=mongodb://localhost:27017 --db=CRUD --collection=mflix_import --file=D:\\Backups\\mflix.json --verbose=5 --jsonArray --maintainInsertionOrder
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+//create separate folders for each db and a file for each collection inside
+mongodump --out=D:\\sampledata
+
+//create a single file
+mongodump --archive=D:\\sampledata\\sampledata1.archive
+
+//backup a specific db
+mongodump --archive=D:\\sampledata\\db_restaurants_dmp_05_Nov.archive --db=sample_restaurants
+
+//backup a specific collection
+mongodump --archive=D:\\sampledata\\coll_restaurants_dmp_05_Nov.archive --db=sample_restaurants --collection=restaurants
+
+//dump specific records in a collection
+mongodump --archive=D:\\sampledata\\coll_restaurants_American_dmp_05_Nov.archive --db=sample_restaurants --collection=restaurants --query='{"cuisine": "American"}'
+
+//exclude collection(s)
+mongodump --archive=D:\\sampledata\\mongodmp_exclude_05_Nov.archive --db=sample_mflix --excludeCollection=comments --excludeCollection=sessions
+
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+// restore from default dump directory
+mongorestore --port=27021
+
+// restore full archive
+mongorestore --port=27021 --archive=D:\\sampledata\\coll_restaurants_American_dmp_05_Nov.archive
+
+// restore specific db
+mongorestore --archive=/media/gpuri/Data1/Mongo/sampledata.archive --db=sample_restaurants
+
+// restore specific collection
+mongorestore --archive=/media/gpuri/Data1/Mongo/sampledata.archive --db=sample_mflix --collection=movies
+mongorestore --archive=/media/gpuri/Data1/Mongo/sampledata.archive --nsInclude=sample_mflix.comments
+
+// exclude collection from restore
+mongorestore --archive=/media/gpuri/Data1/Mongo/sampledata.archive --nsExclude=sample_mflix.comments
+
+// restore from directory and drop each collection before import
+mongorestore --dir=/media/gpuri/Data1/Mongo/sampledata --drop
+
+// dry run without actually restoring
+mongorestore --archive=/media/gpuri/Data1/Mongo/coll_restaurants_American_dmp_05_Nov.archive --dryRun --verbosity
+
