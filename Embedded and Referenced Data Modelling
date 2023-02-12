@@ -1,0 +1,173 @@
+//Embedded Data Modelling in MongoDB using one to Many Relationship
+db.datamodelone.insert({
+    "heading": "Life of an awesome girl",
+    "publish_date": "2016-11-27",
+    "description": "An awesome girl...",
+    "permalink": "http://awesomeblog.com/2016/12/life-of-an-awesome-girl",
+    "categories": [
+        "Make",
+        "Travel",
+        "Fiction",
+        "girl"
+    ],
+    "likes": 56,
+    "comments": [
+        {
+            "name": "Zee Man",
+            "email": "he@gmail.com",
+            "phone": "123456723",
+            "message": "Nice blog",
+            "creationDate": "2016-10-27",
+            "like_flag": true
+        },
+        {
+            "name": "He Man",
+            "email": "he@gmail.com",
+            "phone": "123452289",
+            "message": "awesome blog",
+            "creationDate": "2016-13-27",
+            "like_flag": false
+        },
+        {
+            "name": "Super Man",
+            "email": "super@gmail.com",
+            "phone": "123422789",
+            "message": "super blog",
+            "creationDate": "2016-08-27",
+            "like_flag": true
+        }
+    ]
+})
+{
+    "_id": ObjectId("5a2d40fedfb2ed5fc0a113fc"),
+    "heading": "Life of an awesome girl",
+    "publish_date": "2016-11-27",
+    "description": "An awesome girl...",
+    "permalink": "http://awesomeblog.com/2016/12/life-of-an-awesome-girl",
+    "categories": [
+        "Make",
+        "Travel",
+        "Fiction",
+        "girl"
+    ],
+    "likes": 56,
+    "comments": [
+        {
+            "name": "Zee Man",
+            "email": "he@gmail.com",
+            "phone": "123456723",
+            "message": "Nice blog",
+            "creationDate": "2016-10-27",
+            "like_flag": true
+        },
+        {
+            "name": "He Man",
+            "email": "he@gmail.com",
+            "phone": "123452289",
+            "message": "awesome blog",
+            "creationDate": "2016-13-27",
+            "like_flag": false
+        },
+        {
+            "name": "Super Man",
+            "email": "super@gmail.com",
+            "phone": "123422789",
+            "message": "super blog",
+            "creationDate": "2016-08-27",
+            "like_flag": true
+        }
+    ]
+}
+//Referenced Data Modelling in MongoDB using one to Many Relationship :
+
+db.posts.insert({
+    "heading": "Life of an awesome girl",
+    "publish_date": "2016-11-27",
+    "description": "An awesome girl...",
+    "permalink": "http://awesomeblog.com/2016/12/life-of-an-awesome-girl",
+    "categories": [
+        "Make",
+        "Travel",
+        "Fiction",
+        "girl"
+    ],
+    "likes": 56,
+    "comments":[]
+});
+
+db.comments.insert({
+    "name": "Zee Man",
+    "email": "abc@gmail.com",
+    "phone": "123456789",
+    "message": "awesome blog",
+    "creationDate": "2016-11-27",
+    "like_flag": true
+});
+db.comments.insert({
+    "name": "Zee Man",
+    "email": "he@gmail.com",
+    "phone": "123456723",
+    "message": "Nice blog",
+    "creationDate": "2016-10-27",
+    "like_flag": true
+});
+db.comments.insert({
+    "name": "Super Man",
+    "email": "super@gmail.com",
+    "phone": "123422789",
+    "message": "super blog",
+    "creationDate": "2016-08-27",
+    "like_flag": true
+});
+
+//To add comments's ids in posts referred datamodel:
+db.posts.update(
+    { _id: ObjectId("5a2d3fd0dfb2ed5fc0a113fa") },
+    {
+        $push:
+        {
+            "comments": {
+                "$each":
+                    [ObjectId("5a2d405bdfb2ed5fc0a113fb"), ObjectId("5a2d41fbdfb2ed5fc0a113fd"), ObjectId("5a2d4200dfb2ed5fc0a113fe")]}
+        }
+    }
+);
+
+//Find all comments for a given post id  In case of Embedded:
+db.datamodelone.find({"_id":ObjectId("5a2d40fedfb2ed5fc0a113fc")},{"comments":1,"_id":0}).pretty()
+
+//In case of Referenced:
+rs0:PRIMARY> var ids = db.posts.findOne({"_id":ObjectId("5a2d3fd0dfb2ed5fc0a113fa")},{"comments":1,"_id":0});
+rs0:PRIMARY> ids
+
+//Add comment Id in case of Referenced and comment in case of Embedded data modeling in posts. Embedded:
+db.datamodelone.update({"_id":ObjectId("5a2d40fedfb2ed5fc0a113fc")},{"$push":{"comments":{
+"name": "bat Man",
+"email": "bat@gmail.com",
+"phone": "1233422789",
+"message": "bat blog",
+"creationDate": "2015-08-27",
+"like_flag": true
+}}});
+
+//Referenced:
+db.comments.insert({
+"name" : "bat Man",
+"email" : "bat@gmail.com",
+"phone" : "1233422789",
+"message" : "bat blog",
+"creationDate" : "2015-08-27",
+"like_flag" : true
+}
+);
+db.posts.update({"_id":ObjectId("5a2d3fd0dfb2ed5fc0a113fa")},{"$push":{"comments":ObjectId("5a2d4da0dfb2ed5fc0a113ff")}});
+
+//Find all comments on a post by specific email Embedded.
+var ids = db.posts.findOne({ "_id": ObjectId("5a2d3fd0dfb2ed5fc0a113fa") }, { "comments": 1, "_id": 0 });
+
+//Find all comments on a post by specific email refrenced.
+rs0:PRIMARY> db.comments.find( { $and : [ {"_id":{"$in":ids["comments"]}},
+{ "email":"super@gmail.com"} ] } ).pretty();
+
+//Add category on an existing post refreenced.
+rs0:PRIMARY>db.posts.update({"_id":ObjectId("5a2d3fd0dfb2ed5fc0a113fa")},{"$push":{"categories":"Dinks"}});
